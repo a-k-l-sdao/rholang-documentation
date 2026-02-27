@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction - Rholang Developer Guide</title>
+<style>
+:root {
+  --bg: #1a1b26;
+  --bg-sidebar: #16161e;
+  --bg-code: #12121a;
+  --text: #c0caf5;
+  --text-dim: #565f89;
+  --text-bright: #e0e6ff;
+  --accent: #7aa2f7;
+  --accent-hover: #89b4fa;
+  --border: #292e42;
+  --h1: #bb9af7;
+  --h2: #7dcfff;
+  --h3: #73daca;
+  --str: #9ece6a;
+  --kw: #bb9af7;
+  --comment: #565f89;
+  --num: #ff9e64;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+}
+nav {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+nav .logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+nav .logo h2 {
+  color: var(--h1);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+nav .logo p {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin-top: 4px;
+}
+nav a {
+  display: block;
+  padding: 8px 20px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+nav a:hover {
+  color: var(--text);
+  background: rgba(122, 162, 247, 0.06);
+}
+nav a.active {
+  color: var(--accent);
+  background: rgba(122, 162, 247, 0.1);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+main {
+  margin-left: 260px;
+  flex: 1;
+  max-width: 860px;
+  padding: 48px 56px 80px;
+}
+h1 {
+  color: var(--h1);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+h2 {
+  color: var(--h2);
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  color: var(--h3);
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+h4 { color: var(--text-bright); font-size: 15px; margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 16px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+code {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13.5px;
+}
+p code, li code, td code {
+  background: var(--bg-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 13px;
+}
+pre {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+pre code {
+  color: var(--text);
+  font-size: 13.5px;
+}
+ul, ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+li {
+  margin-bottom: 4px;
+}
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+}
+th {
+  background: var(--bg-sidebar);
+  color: var(--text-bright);
+  font-weight: 600;
+}
+td { background: var(--bg-code); }
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+strong { color: var(--text-bright); }
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.page-nav a {
+  padding: 8px 16px;
+  background: rgba(122, 162, 247, 0.1);
+  border-radius: 6px;
+  font-size: 14px;
+}
+.page-nav a:hover {
+  background: rgba(122, 162, 247, 0.2);
+  text-decoration: none;
+}
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 20px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  nav {
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    z-index: 50;
+  }
+  nav.open { transform: translateX(0); }
+  main { margin-left: 0; padding: 48px 20px; }
+  .hamburger { display: block; }
+}
+
+/* Syntax highlighting for code blocks */
+.language-rholang .kw,
+pre code .kw { color: var(--kw); }
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')">&#9776;</button>
+<nav>
+  <div class="logo">
+    <h2>Rholang Guide</h2>
+    <p>F1R3FLY Developer Docs</p>
+  </div>
+  <a href="index.html" class="active">Introduction</a>
+<a href="01-language-basics.html">Language Basics</a>
+<a href="02-contracts-and-patterns.html">Contracts & Patterns</a>
+<a href="03-system-contracts.html">System Contracts</a>
+<a href="04-deploys-and-registry.html">Deploys & Registry</a>
+<a href="05-security-patterns.html">Security Patterns</a>
+<a href="06-standard-library.html">Standard Library</a>
+<a href="07-examples.html">Examples</a>
+</nav>
+<main>
+<h1 id="rholang-developer-guide">Rholang Developer Guide</h1>
+<p>Rholang is a concurrent, process-oriented programming language for the F1R3FLY blockchain. Everything is a process communicating over channels. There is no shared mutable state -- processes exchange data by sending and receiving messages.</p>
+<p>This guide covers the language from basics to system contracts.</p>
+<h2 id="contents">Contents</h2>
+<ol><li><a href="01-language-basics.html">Language Basics</a> -- Syntax, data types, channels, processes</li>
+<li><a href="02-contracts-and-patterns.html">Contracts and Patterns</a> -- Contracts, pattern matching, state</li>
+<li><a href="03-system-contracts.html">System Contracts</a> -- rho:io, rho:crypto, rho:registry, vaults, AI</li>
+<li><a href="04-deploys-and-registry.html">Deploys and the Registry</a> -- How to deploy, exploratory vs full, registry URIs</li>
+<li><a href="05-security-patterns.html">Security Patterns</a> -- Bundles, capabilities, attenuation, revocation</li>
+<li><a href="06-standard-library.html">Standard Library</a> -- ListOps, TreeHashMap, NonNegativeNumber, MakeMint, AuthKey</li>
+<li><a href="07-examples.html">Examples</a> -- Complete working examples</li></ol>
+<div class="page-nav">
+  <span></span>
+  <span><a href="01-language-basics.html">Language Basics &rarr;</a></span>
+</div>
+</main>
+</body>
+</html>

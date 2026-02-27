@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Examples - Rholang Developer Guide</title>
+<style>
+:root {
+  --bg: #1a1b26;
+  --bg-sidebar: #16161e;
+  --bg-code: #12121a;
+  --text: #c0caf5;
+  --text-dim: #565f89;
+  --text-bright: #e0e6ff;
+  --accent: #7aa2f7;
+  --accent-hover: #89b4fa;
+  --border: #292e42;
+  --h1: #bb9af7;
+  --h2: #7dcfff;
+  --h3: #73daca;
+  --str: #9ece6a;
+  --kw: #bb9af7;
+  --comment: #565f89;
+  --num: #ff9e64;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+}
+nav {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+nav .logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+nav .logo h2 {
+  color: var(--h1);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+nav .logo p {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin-top: 4px;
+}
+nav a {
+  display: block;
+  padding: 8px 20px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+nav a:hover {
+  color: var(--text);
+  background: rgba(122, 162, 247, 0.06);
+}
+nav a.active {
+  color: var(--accent);
+  background: rgba(122, 162, 247, 0.1);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+main {
+  margin-left: 260px;
+  flex: 1;
+  max-width: 860px;
+  padding: 48px 56px 80px;
+}
+h1 {
+  color: var(--h1);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+h2 {
+  color: var(--h2);
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  color: var(--h3);
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+h4 { color: var(--text-bright); font-size: 15px; margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 16px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+code {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13.5px;
+}
+p code, li code, td code {
+  background: var(--bg-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 13px;
+}
+pre {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+pre code {
+  color: var(--text);
+  font-size: 13.5px;
+}
+ul, ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+li {
+  margin-bottom: 4px;
+}
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+}
+th {
+  background: var(--bg-sidebar);
+  color: var(--text-bright);
+  font-weight: 600;
+}
+td { background: var(--bg-code); }
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+strong { color: var(--text-bright); }
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.page-nav a {
+  padding: 8px 16px;
+  background: rgba(122, 162, 247, 0.1);
+  border-radius: 6px;
+  font-size: 14px;
+}
+.page-nav a:hover {
+  background: rgba(122, 162, 247, 0.2);
+  text-decoration: none;
+}
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 20px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  nav {
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    z-index: 50;
+  }
+  nav.open { transform: translateX(0); }
+  main { margin-left: 0; padding: 48px 20px; }
+  .hamburger { display: block; }
+}
+
+/* Syntax highlighting for code blocks */
+.language-rholang .kw,
+pre code .kw { color: var(--kw); }
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')">&#9776;</button>
+<nav>
+  <div class="logo">
+    <h2>Rholang Guide</h2>
+    <p>F1R3FLY Developer Docs</p>
+  </div>
+  <a href="index.html">Introduction</a>
+<a href="01-language-basics.html">Language Basics</a>
+<a href="02-contracts-and-patterns.html">Contracts & Patterns</a>
+<a href="03-system-contracts.html">System Contracts</a>
+<a href="04-deploys-and-registry.html">Deploys & Registry</a>
+<a href="05-security-patterns.html">Security Patterns</a>
+<a href="06-standard-library.html">Standard Library</a>
+<a href="07-examples.html" class="active">Examples</a>
+</nav>
+<main>
+<h1 id="complete-working-examples">Complete Working Examples</h1>
+<h2 id="1-hello-world">1. Hello World</h2>
+<p>The simplest deploy. Prints to the node's stdout:</p>
+<pre><code class="language-rholang">new stdout(`rho:io:stdout`) in {
+  stdout!(&quot;Hello, Shard!&quot;)
+}</code></pre>
+<p>Deploy with:</p>
+<pre><code class="language-bash">cargo run -- deploy -f hello.rho -p 40402</code></pre>
+<p>Or as an exploratory deploy (free, read-only):</p>
+<pre><code class="language-bash">cargo run -- exploratory-deploy -f hello.rho -p 40402</code></pre>
+<h2 id="2-return-channel-request-response">2. Return Channel (Request/Response)</h2>
+<p>Define a contract that takes arguments and returns a result through a callback channel:</p>
+<pre><code class="language-rholang">new stdout(`rho:io:stdout`), ack in {
+  contract multiply(@a, @b, ret) = { ret!(a * b) } |
+  multiply!(3, 4, *ack) |
+  for (@res &lt;- ack) { stdout!(res) }
+}</code></pre>
+<p>Output: <code>12</code></p>
+<p>The pattern: the caller creates a fresh channel (<code>ack</code>), passes <code>*ack</code> (the name) to the contract, and waits on it with <code>for</code>.</p>
+<h2 id="3-pattern-matching">3. Pattern Matching</h2>
+<p>Branch on values using <code>match</code>:</p>
+<pre><code class="language-rholang">new stdout(`rho:io:stdout`) in {
+  contract check(@x) = {
+    match x {
+      0 =&gt; { stdout!(&quot;zero&quot;) }
+      1 =&gt; { stdout!(&quot;one&quot;) }
+      _ =&gt; { stdout!(&quot;other&quot;) }
+    }
+  } |
+  check!(1) |
+  check!(0) |
+  check!(42)
+}</code></pre>
+<p>All three calls run concurrently. Output order is non-deterministic.</p>
+<h2 id="4-recursion-looping">4. Recursion (Looping)</h2>
+<p>There are no for-loops. Use recursive contracts:</p>
+<pre><code class="language-rholang">new stdout(`rho:io:stdout`) in {
+  contract counter(@n) = {
+    if (n &lt;= 0) { stdout!(&quot;Done&quot;) } else {
+      stdout!(n) |
+      counter!(n - 1)
+    }
+  } |
+  counter!(3)
+}</code></pre>
+<p>Output (order may vary): <code>3</code>, <code>2</code>, <code>1</code>, <code>Done</code></p>
+<h2 id="5-concurrent-processes">5. Concurrent Processes</h2>
+<p>The <code>|</code> operator runs processes in parallel:</p>
+<pre><code class="language-rholang">new stdout(`rho:io:stdout`) in {
+  contract printer(@msg) = { stdout!(msg) } |
+  printer!(&quot;A&quot;) | printer!(&quot;B&quot;) | printer!(&quot;C&quot;)
+}</code></pre>
+<p>All three messages print concurrently. There is no guaranteed ordering.</p>
+<h2 id="6-returning-results-via-deployid">6. Returning Results via deployId</h2>
+<p>To get data back from a full deploy, write to the <code>deployId</code> channel. The deployer retrieves it by querying <code>data-at-name</code>:</p>
+<pre><code class="language-rholang">new deployId(`rho:rchain:deployId`),
+    stdout(`rho:io:stdout`) in {
+  deployId!({&quot;status&quot;: &quot;ok&quot;, &quot;value&quot;: 42}) |
+  stdout!(&quot;Result sent to deployId&quot;)
+}</code></pre>
+<p>Retrieve the result:</p>
+<pre><code class="language-bash"># 1. Deploy and get the deploy ID
+DEPLOY_ID=$(cargo run -- deploy -f contract.rho -b -p 40402 | grep -oP &#x27;Deploy ID: \K\S+&#x27;)
+
+# 2. Poll for the result (after block is proposed)
+curl -s -X POST http://localhost:40403/api/data-at-name \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;depth&quot;:1,&quot;name&quot;:{&quot;UnforgDeploy&quot;:{&quot;data&quot;:&quot;&#x27;&quot;$DEPLOY_ID&quot;&#x27;&quot;}}}&#x27;</code></pre>
+<h2 id="7-register-a-contract-in-the-registry">7. Register a Contract in the Registry</h2>
+<p>Deploy a contract once, then call it from other deploys by its URI:</p>
+<h3 id="deploy-1-register">Deploy 1: Register</h3>
+<pre><code class="language-rholang">new insertArbitrary(`rho:registry:insertArbitrary`),
+    deployId(`rho:rchain:deployId`),
+    stdout(`rho:io:stdout`),
+    calculator in {
+
+  contract calculator(@method, @a, @b, ret) = {
+    match method {
+      &quot;add&quot; =&gt; { ret!(a + b) }
+      &quot;mul&quot; =&gt; { ret!(a * b) }
+      _     =&gt; { ret!({&quot;error&quot;: &quot;UnknownMethod&quot;}) }
+    }
+  } |
+
+  insertArbitrary!(bundle+{*calculator}, *deployId) |
+  for (@uri &lt;- deployId) {
+    stdout!([&quot;Calculator registered at&quot;, uri])
+  }
+}</code></pre>
+<p>Save the URI from the output (e.g., <code>rho:id:abc123...</code>).</p>
+<h3 id="deploy-2-call-it">Deploy 2: Call it</h3>
+<pre><code class="language-rholang">new deployId(`rho:rchain:deployId`),
+    lookup(`rho:registry:lookup`),
+    calcCh, retCh in {
+  lookup!(`rho:id:abc123...`, *calcCh) |
+  for (calc &lt;- calcCh) {
+    calc!(&quot;add&quot;, 10, 32, *retCh) |
+    for (@result &lt;- retCh) {
+      deployId!(result)  // 42
+    }
+  }
+}</code></pre>
+<h2 id="8-persist-data-across-deploys">8. Persist Data Across Deploys</h2>
+<p>Store a value in the registry so it survives across blocks:</p>
+<pre><code class="language-rholang">new insertArbitrary(`rho:registry:insertArbitrary`),
+    stdout(`rho:io:stdout`),
+    deployId(`rho:rchain:deployId`),
+    dataCh in {
+  dataCh!(&quot;Persistent Data&quot;) |
+  insertArbitrary!(*dataCh, *deployId) |
+  for (@uri &lt;- deployId) {
+    stdout!(uri)
+  }
+}</code></pre>
+<p>Later, look it up:</p>
+<pre><code class="language-rholang">new lookup(`rho:registry:lookup`), ch in {
+  lookup!(`rho:id:&lt;uri-from-above&gt;`, *ch) |
+  for (@data &lt;- ch) {
+    // data == &quot;Persistent Data&quot;
+  }
+}</code></pre>
+<h2 id="9-mutable-state-cell">9. Mutable State Cell</h2>
+<p>A reusable get/set cell using a channel as storage:</p>
+<pre><code class="language-rholang">new stdout(`rho:io:stdout`), MakeCell in {
+  contract MakeCell(@init, get, set) = {
+    new valueCh in {
+      valueCh!(init) |
+      contract get(ret) = {
+        for (@v &lt;- valueCh) {
+          valueCh!(v) | ret!(v)
+        }
+      } |
+      contract set(@newVal, ack) = {
+        for (_ &lt;- valueCh) {
+          valueCh!(newVal) | ack!(true)
+        }
+      }
+    }
+  } |
+
+  new get, set, ack in {
+    MakeCell!(0, *get, *set) |
+    // Set value to 42
+    set!(42, *ack) |
+    for (_ &lt;- ack) {
+      // Read value back
+      get!(*ack) |
+      for (@v &lt;- ack) {
+        stdout!([&quot;value is&quot;, v])  // [&quot;value is&quot;, 42]
+      }
+    }
+  }
+}</code></pre>
+<h2 id="10-rev-balance-check">10. REV Balance Check</h2>
+<p>Query a REV vault balance (works as exploratory deploy):</p>
+<pre><code class="language-rholang">new rl(`rho:registry:lookup`),
+    stdout(`rho:io:stdout`),
+    RevVaultCh in {
+  rl!(`rho:rchain:revVault`, *RevVaultCh) |
+  for (@(_, RevVault) &lt;- RevVaultCh) {
+    new vaultCh in {
+      @RevVault!(&quot;findOrCreate&quot;, &quot;1111your_rev_address_here&quot;, *vaultCh) |
+      for (@(true, vault) &lt;- vaultCh) {
+        new balCh in {
+          @vault!(&quot;balance&quot;, *balCh) |
+          for (@balance &lt;- balCh) {
+            stdout!([&quot;Balance:&quot;, balance])
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+<h2 id="11-rev-transfer">11. REV Transfer</h2>
+<p>Transfer REV between addresses (requires a full deploy, not exploratory):</p>
+<pre><code class="language-rholang">new rl(`rho:registry:lookup`),
+    deployerId(`rho:rchain:deployerId`),
+    deployId(`rho:rchain:deployId`),
+    stdout(`rho:io:stdout`),
+    RevVaultCh in {
+  rl!(`rho:rchain:revVault`, *RevVaultCh) |
+  for (@(_, RevVault) &lt;- RevVaultCh) {
+    new vaultCh, authKeyCh, resultCh in {
+      @RevVault!(&quot;findOrCreate&quot;, &quot;1111senderAddress&quot;, *vaultCh) |
+      @RevVault!(&quot;deployerAuthKey&quot;, *deployerId, *authKeyCh) |
+      for (@(true, vault) &lt;- vaultCh; authKey &lt;- authKeyCh) {
+        @vault!(&quot;transfer&quot;, &quot;1111recipientAddress&quot;, 500, *authKey, *resultCh) |
+        for (@result &lt;- resultCh) {
+          match result {
+            (true, _)    =&gt; { deployId!(&quot;Transfer ok&quot;) }
+            (false, err) =&gt; { deployId!(err) }
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+<h2 id="12-querying-a-deployed-contract">12. Querying a Deployed Contract</h2>
+<p>A common pattern: look up a registered contract by URI and call a method:</p>
+<pre><code class="language-rholang">new deployId(`rho:rchain:deployId`),
+    lookup(`rho:registry:lookup`),
+    stdout(`rho:io:stdout`),
+    bridgeCh in {
+  lookup!(`rho:id:your_contract_uri_here`, *bridgeCh) |
+  for (bridge &lt;- bridgeCh) {
+    new retCh in {
+      bridge!(&quot;getNonce&quot;, *retCh) |
+      for (@result &lt;- retCh) {
+        stdout!([&quot;nonce&quot;, result]) |
+        deployId!(result)
+      }
+    }
+  }
+}</code></pre>
+<p>Deploy and retrieve the result:</p>
+<pre><code class="language-bash">DEPLOY_ID=$(cargo run -- deploy -f get_nonce.rho -b -p 40402 | grep -oP &#x27;Deploy ID: \K\S+&#x27;)
+
+# Wait for block, then poll
+curl -s -X POST http://localhost:40403/api/data-at-name \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;depth&quot;:1,&quot;name&quot;:{&quot;UnforgDeploy&quot;:{&quot;data&quot;:&quot;&#x27;&quot;$DEPLOY_ID&quot;&#x27;&quot;}}}&#x27;</code></pre>
+<h2 id="13-sequential-operations-with-acknowledgments">13. Sequential Operations with Acknowledgments</h2>
+<p>Force ordering in a concurrent language:</p>
+<pre><code class="language-rholang">new stdoutAck(`rho:io:stdout:ack`),
+    stdout(`rho:io:stdout`),
+    ack in {
+  stdoutAck!(&quot;Step 1: Initialize&quot;, *ack) |
+  for (_ &lt;- ack) {
+    stdoutAck!(&quot;Step 2: Process&quot;, *ack) |
+    for (_ &lt;- ack) {
+      stdoutAck!(&quot;Step 3: Finalize&quot;, *ack) |
+      for (_ &lt;- ack) {
+        stdout!(&quot;All steps complete&quot;)
+      }
+    }
+  }
+}</code></pre>
+<p>Guaranteed output order: Step 1, Step 2, Step 3, All steps complete.</p>
+<h2 id="14-multi-method-contract-object-pattern">14. Multi-Method Contract (Object Pattern)</h2>
+<p>Expose multiple methods on a single channel using pattern matching on the first argument:</p>
+<pre><code class="language-rholang">new insertArbitrary(`rho:registry:insertArbitrary`),
+    deployId(`rho:rchain:deployId`),
+    stdout(`rho:io:stdout`),
+    tokenService in {
+
+  new totalCh, nonceCh in {
+    totalCh!(0) | nonceCh!(0) |
+
+    contract tokenService(@method, @arg, ret) = {
+      match method {
+        &quot;lock&quot; =&gt; {
+          for (@total &lt;- totalCh; @nonce &lt;- nonceCh) {
+            totalCh!(total + arg) |
+            nonceCh!(nonce + 1) |
+            ret!({&quot;status&quot;: &quot;ok&quot;, &quot;nonce&quot;: nonce, &quot;total&quot;: total + arg})
+          }
+        }
+        &quot;getTotal&quot; =&gt; {
+          for (@total &lt;- totalCh) {
+            totalCh!(total) |
+            ret!(total)
+          }
+        }
+        &quot;getNonce&quot; =&gt; {
+          for (@nonce &lt;- nonceCh) {
+            nonceCh!(nonce) |
+            ret!(nonce)
+          }
+        }
+        _ =&gt; {
+          ret!({&quot;error&quot;: &quot;UnknownMethod&quot;})
+        }
+      }
+    } |
+
+    insertArbitrary!(bundle+{*tokenService}, *deployId) |
+    for (@uri &lt;- deployId) {
+      stdout!([&quot;TokenService registered at&quot;, uri])
+    }
+  }
+}</code></pre>
+<h2 id="15-hashing-and-signature-verification">15. Hashing and Signature Verification</h2>
+<p>Use built-in crypto system contracts:</p>
+<pre><code class="language-rholang">new sha256(`rho:crypto:sha256Hash`),
+    keccak(`rho:crypto:keccak256Hash`),
+    stdout(`rho:io:stdout`),
+    ret1, ret2 in {
+  sha256!(&quot;hello&quot;.toByteArray(), *ret1) |
+  keccak!(&quot;hello&quot;.toByteArray(), *ret2) |
+  for (@shaHash &lt;- ret1; @kecHash &lt;- ret2) {
+    stdout!([&quot;SHA-256:&quot;, shaHash]) |
+    stdout!([&quot;Keccak-256:&quot;, kecHash])
+  }
+}</code></pre>
+<p>Verify an Ed25519 signature:</p>
+<pre><code class="language-rholang">new verify(`rho:crypto:ed25519Verify`), ret in {
+  verify!(dataBytes, signatureBytes, publicKeyBytes, *ret) |
+  for (@valid &lt;- ret) {
+    if (valid) {
+      // signature is valid
+    } else {
+      // signature is invalid
+    }
+  }
+}</code></pre>
+<h2 id="tips-and-common-pitfalls">Tips and Common Pitfalls</h2>
+<ol><li><strong>Exploratory deploys are read-only.</strong> They can call system contracts (<code>rho:io:stdout</code>, <code>rho:registry:lookup</code>, etc.) but cannot trigger user-deployed contracts. Use <code>full-deploy</code> or <code>deploy</code> + propose for state changes.</li></ol>
+<ol><li><strong>Always consume and replace state.</strong> When reading from a state channel, put the value back:</li></ol>
+<pre><code class="language-rholang">   for (@v &lt;- stateCh) { stateCh!(v) | /* use v */ }</code></pre>
+<p>If you forget <code>stateCh!(v)</code>, the value is gone forever.</p>
+<ol><li><strong>Use <code>-b</code> for large contracts.</strong> The default phlo limit (50,000) is too low for anything beyond trivial contracts. The <code>-b</code> flag sets it to 5 billion.</li></ol>
+<ol><li><strong>Registry URIs use backticks, not quotes.</strong></li></ol>
+<pre><code class="language-rholang">   lookup!(`rho:id:abc123...`, *ch)   // correct
+   lookup!(&quot;rho:id:abc123...&quot;, *ch)   // WRONG -- treated as a string, not a URI</code></pre>
+<ol><li><strong>System contracts return tuples.</strong> When looking up system contracts (like <code>rho:rchain:revVault</code>), destructure the tuple:</li></ol>
+<pre><code class="language-rholang">   for (@(_, RevVault) &lt;- ch) { ... }  // system contract
+   for (contract &lt;- ch) { ... }         // user contract</code></pre>
+<ol><li><strong>No big integers.</strong> Rholang integers have limits. If bridging from Ethereum, convert wei to whole tokens before embedding in Rholang code.</li></ol>
+<ol><li><strong>Order is not guaranteed.</strong> Processes separated by <code>|</code> run concurrently. Use acknowledgment channels (<code>rho:io:stdout:ack</code>) or join patterns (<code>for (a <- ch1; b <- ch2)</code>) to enforce ordering.</li></ol>
+<div class="page-nav">
+  <span><a href="06-standard-library.html">&larr; Standard Library</a></span>
+  <span></span>
+</div>
+</main>
+</body>
+</html>

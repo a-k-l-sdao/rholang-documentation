@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Basics - Rholang Developer Guide</title>
+<style>
+:root {
+  --bg: #1a1b26;
+  --bg-sidebar: #16161e;
+  --bg-code: #12121a;
+  --text: #c0caf5;
+  --text-dim: #565f89;
+  --text-bright: #e0e6ff;
+  --accent: #7aa2f7;
+  --accent-hover: #89b4fa;
+  --border: #292e42;
+  --h1: #bb9af7;
+  --h2: #7dcfff;
+  --h3: #73daca;
+  --str: #9ece6a;
+  --kw: #bb9af7;
+  --comment: #565f89;
+  --num: #ff9e64;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+}
+nav {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+nav .logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+nav .logo h2 {
+  color: var(--h1);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+nav .logo p {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin-top: 4px;
+}
+nav a {
+  display: block;
+  padding: 8px 20px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+nav a:hover {
+  color: var(--text);
+  background: rgba(122, 162, 247, 0.06);
+}
+nav a.active {
+  color: var(--accent);
+  background: rgba(122, 162, 247, 0.1);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+main {
+  margin-left: 260px;
+  flex: 1;
+  max-width: 860px;
+  padding: 48px 56px 80px;
+}
+h1 {
+  color: var(--h1);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+h2 {
+  color: var(--h2);
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  color: var(--h3);
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+h4 { color: var(--text-bright); font-size: 15px; margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 16px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+code {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13.5px;
+}
+p code, li code, td code {
+  background: var(--bg-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 13px;
+}
+pre {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+pre code {
+  color: var(--text);
+  font-size: 13.5px;
+}
+ul, ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+li {
+  margin-bottom: 4px;
+}
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+}
+th {
+  background: var(--bg-sidebar);
+  color: var(--text-bright);
+  font-weight: 600;
+}
+td { background: var(--bg-code); }
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+strong { color: var(--text-bright); }
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.page-nav a {
+  padding: 8px 16px;
+  background: rgba(122, 162, 247, 0.1);
+  border-radius: 6px;
+  font-size: 14px;
+}
+.page-nav a:hover {
+  background: rgba(122, 162, 247, 0.2);
+  text-decoration: none;
+}
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 20px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  nav {
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    z-index: 50;
+  }
+  nav.open { transform: translateX(0); }
+  main { margin-left: 0; padding: 48px 20px; }
+  .hamburger { display: block; }
+}
+
+/* Syntax highlighting for code blocks */
+.language-rholang .kw,
+pre code .kw { color: var(--kw); }
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')">&#9776;</button>
+<nav>
+  <div class="logo">
+    <h2>Rholang Guide</h2>
+    <p>F1R3FLY Developer Docs</p>
+  </div>
+  <a href="index.html">Introduction</a>
+<a href="01-language-basics.html" class="active">Language Basics</a>
+<a href="02-contracts-and-patterns.html">Contracts & Patterns</a>
+<a href="03-system-contracts.html">System Contracts</a>
+<a href="04-deploys-and-registry.html">Deploys & Registry</a>
+<a href="05-security-patterns.html">Security Patterns</a>
+<a href="06-standard-library.html">Standard Library</a>
+<a href="07-examples.html">Examples</a>
+</nav>
+<main>
+<h1 id="language-basics">Language Basics</h1>
+<h2 id="processes-and-channels">Processes and Channels</h2>
+<p>Everything in Rholang is a <strong>process</strong>. Processes communicate over <strong>channels</strong> (also called names). A channel is just a quoted process: <code>@process</code> turns a process into a name, <code>*name</code> turns a name back into a process.</p>
+<pre><code class="language-rholang">// Send the number 42 on the channel @&quot;myChannel&quot;
+@&quot;myChannel&quot;!(42)
+
+// Receive from that channel
+for (@value &lt;- @&quot;myChannel&quot;) {
+  // value is now 42
+}</code></pre>
+<h2 id="new-creating-private-channels"><code>new</code> -- Creating Private Channels</h2>
+<p><code>new</code> creates unforgeable (private) channels. Only code within the <code>new</code> block can access them.</p>
+<pre><code class="language-rholang">new myChannel in {
+  myChannel!(42) |
+  for (@x &lt;- myChannel) {
+    // x == 42
+  }
+}</code></pre>
+<p>Bind system contracts with URI syntax:</p>
+<pre><code class="language-rholang">new stdout(`rho:io:stdout`) in {
+  stdout!(&quot;Hello World&quot;)
+}</code></pre>
+<h2 id="sending-and-receiving">Sending and Receiving</h2>
+<p><strong>Single send</strong> -- consumed once:</p>
+<pre><code class="language-rholang">channel!(data)</code></pre>
+<p><strong>Persistent send</strong> -- stays in the tuplespace forever:</p>
+<pre><code class="language-rholang">channel!!(data)</code></pre>
+<p><strong>Single receive</strong> -- fires once then stops:</p>
+<pre><code class="language-rholang">for (@data &lt;- channel) { ... }</code></pre>
+<p><strong>Persistent receive</strong> -- fires for every message (replicated):</p>
+<pre><code class="language-rholang">for (@data &lt;= channel) { ... }</code></pre>
+<h2 id="parallel-composition">Parallel Composition</h2>
+<p>The <code>|</code> operator runs processes concurrently:</p>
+<pre><code class="language-rholang">new ch in {
+  ch!(1) | ch!(2) | ch!(3) |
+  for (@a &lt;- ch; @b &lt;- ch) {
+    // a and b are any two of 1, 2, 3
+  }
+}</code></pre>
+<h2 id="joins">Joins</h2>
+<p>Receive from multiple channels simultaneously:</p>
+<pre><code class="language-rholang">for (@x &lt;- chan1; @y &lt;- chan2) {
+  // Fires when BOTH chan1 and chan2 have data
+}</code></pre>
+<h2 id="data-types">Data Types</h2>
+<h3 id="primitives">Primitives</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Type</th><th>Examples</th></tr></thead>
+<tbody>
+<tr><td>Integer</td><td><code>42</code>, <code>-1</code>, <code>0</code></td></tr>
+<tr><td>String</td><td><code>"hello"</code>, <code>""</code></td></tr>
+<tr><td>Boolean</td><td><code>true</code>, <code>false</code></td></tr>
+<tr><td>Nil</td><td><code>Nil</code></td></tr>
+<tr><td>ByteArray</td><td><code>"data".toByteArray()</code></td></tr>
+<tr><td>URI</td><td>`<code> </code>rho:io:stdout<code> </code>`</td></tr>
+</tbody></table></div>
+<h3 id="collections">Collections</h3>
+<p><strong>Lists</strong> (ordered):</p>
+<pre><code class="language-rholang">[]
+[1, 2, 3]
+[1, &quot;mixed&quot;, true]
+
+list.nth(0)          // first element
+list.length()        // size
+list.slice(1, 3)     // sublist [1..3)
+list ++ [4, 5]       // concatenation</code></pre>
+<p><strong>Maps</strong> (key-value):</p>
+<pre><code class="language-rholang">{}
+{&quot;name&quot;: &quot;Alice&quot;, &quot;age&quot;: 30}
+
+map.get(&quot;name&quot;)              // &quot;Alice&quot; or Nil
+map.getOrElse(&quot;x&quot;, &quot;default&quot;)
+map.set(&quot;name&quot;, &quot;Bob&quot;)       // new map with updated key
+map.delete(&quot;name&quot;)           // new map without key
+map.contains(&quot;name&quot;)         // true/false
+map.keys()                   // set of keys
+map.size()                   // number of entries</code></pre>
+<p><strong>Sets</strong> (unordered, unique):</p>
+<pre><code class="language-rholang">Set()
+Set(1, 2, 3)
+
+set.contains(2)     // true
+set.add(4)           // new set
+set.delete(2)        // new set
+set.union(otherSet)
+set.diff(otherSet)
+set.size()</code></pre>
+<p><strong>Tuples</strong> (ordered, fixed-size):</p>
+<pre><code class="language-rholang">(1,)           // single element (trailing comma required)
+(1, 2, 3)
+tuple.nth(0)   // first element</code></pre>
+<h2 id="expressions">Expressions</h2>
+<pre><code class="language-rholang">// Arithmetic
+1 + 2    3 - 1    2 * 3    10 / 3
+
+// Comparison
+x &gt; 5    x &gt;= 5    x &lt; 5    x &lt;= 5    x == 5    x != 5
+
+// Logical
+true and false    true or false    not true
+
+// String concatenation
+&quot;hello&quot; ++ &quot; &quot; ++ &quot;world&quot;</code></pre>
+<h2 id="conditionals">Conditionals</h2>
+<pre><code class="language-rholang">if (x &gt; 0) {
+  stdout!(&quot;positive&quot;)
+} else {
+  stdout!(&quot;non-positive&quot;)
+}</code></pre>
+<p>The <code>else</code> branch is optional (defaults to <code>Nil</code>).</p>
+<h2 id="method-calls-on-data">Method Calls on Data</h2>
+<pre><code class="language-rholang">&quot;hello&quot;.length()            // 5
+&quot;hello&quot;.slice(1, 3)         // &quot;el&quot;
+&quot;abc&quot;.toByteArray()         // byte array
+&quot;4f2a&quot;.hexToBytes()         // bytes from hex
+&quot;text&quot;.toUtf8Bytes()        // UTF-8 encoded bytes</code></pre>
+<h2 id="quoting-and-unquoting">Quoting and Unquoting</h2>
+<p><code>@</code> quotes a process into a name. <code>*</code> unquotes a name back into a process.</p>
+<pre><code class="language-rholang">@42          // the name derived from process 42
+@&quot;hello&quot;     // the name derived from process &quot;hello&quot;
+*myChannel   // the process bound to name myChannel</code></pre>
+<p>Name equivalence: <code>@{10 + 2}</code> is the same name as <code>@12</code> because expressions are evaluated before quoting.</p>
+<p>Inside <code>for</code> patterns, <code>@</code> destructures incoming data:</p>
+<pre><code class="language-rholang">for (@x &lt;- ch) { ... }    // x binds to the value (process)
+for (x &lt;- ch) { ... }     // x binds to the name (channel)</code></pre>
+<div class="page-nav">
+  <span><a href="index.html">&larr; Introduction</a></span>
+  <span><a href="02-contracts-and-patterns.html">Contracts & Patterns &rarr;</a></span>
+</div>
+</main>
+</body>
+</html>

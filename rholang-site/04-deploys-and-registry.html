@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deploys & Registry - Rholang Developer Guide</title>
+<style>
+:root {
+  --bg: #1a1b26;
+  --bg-sidebar: #16161e;
+  --bg-code: #12121a;
+  --text: #c0caf5;
+  --text-dim: #565f89;
+  --text-bright: #e0e6ff;
+  --accent: #7aa2f7;
+  --accent-hover: #89b4fa;
+  --border: #292e42;
+  --h1: #bb9af7;
+  --h2: #7dcfff;
+  --h3: #73daca;
+  --str: #9ece6a;
+  --kw: #bb9af7;
+  --comment: #565f89;
+  --num: #ff9e64;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+}
+nav {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+nav .logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+nav .logo h2 {
+  color: var(--h1);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+nav .logo p {
+  color: var(--text-dim);
+  font-size: 12px;
+  margin-top: 4px;
+}
+nav a {
+  display: block;
+  padding: 8px 20px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+nav a:hover {
+  color: var(--text);
+  background: rgba(122, 162, 247, 0.06);
+}
+nav a.active {
+  color: var(--accent);
+  background: rgba(122, 162, 247, 0.1);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+main {
+  margin-left: 260px;
+  flex: 1;
+  max-width: 860px;
+  padding: 48px 56px 80px;
+}
+h1 {
+  color: var(--h1);
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+h2 {
+  color: var(--h2);
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 48px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  color: var(--h3);
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+h4 { color: var(--text-bright); font-size: 15px; margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 16px; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+code {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+  font-size: 13.5px;
+}
+p code, li code, td code {
+  background: var(--bg-code);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 13px;
+}
+pre {
+  background: var(--bg-code);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+pre code {
+  color: var(--text);
+  font-size: 13.5px;
+}
+ul, ol {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+li {
+  margin-bottom: 4px;
+}
+.table-wrap {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+}
+th {
+  background: var(--bg-sidebar);
+  color: var(--text-bright);
+  font-weight: 600;
+}
+td { background: var(--bg-code); }
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+strong { color: var(--text-bright); }
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.page-nav a {
+  padding: 8px 16px;
+  background: rgba(122, 162, 247, 0.1);
+  border-radius: 6px;
+  font-size: 14px;
+}
+.page-nav a:hover {
+  background: rgba(122, 162, 247, 0.2);
+  text-decoration: none;
+}
+.hamburger {
+  display: none;
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 20px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  nav {
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    z-index: 50;
+  }
+  nav.open { transform: translateX(0); }
+  main { margin-left: 0; padding: 48px 20px; }
+  .hamburger { display: block; }
+}
+
+/* Syntax highlighting for code blocks */
+.language-rholang .kw,
+pre code .kw { color: var(--kw); }
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="document.querySelector('nav').classList.toggle('open')">&#9776;</button>
+<nav>
+  <div class="logo">
+    <h2>Rholang Guide</h2>
+    <p>F1R3FLY Developer Docs</p>
+  </div>
+  <a href="index.html">Introduction</a>
+<a href="01-language-basics.html">Language Basics</a>
+<a href="02-contracts-and-patterns.html">Contracts & Patterns</a>
+<a href="03-system-contracts.html">System Contracts</a>
+<a href="04-deploys-and-registry.html" class="active">Deploys & Registry</a>
+<a href="05-security-patterns.html">Security Patterns</a>
+<a href="06-standard-library.html">Standard Library</a>
+<a href="07-examples.html">Examples</a>
+</nav>
+<main>
+<h1 id="deploys-and-the-registry">Deploys and the Registry</h1>
+<h2 id="deploy-types">Deploy Types</h2>
+<h3 id="exploratory-deploy">Exploratory Deploy</h3>
+<p>Read-only. Free (no phlo). Can only call system contracts. Cannot trigger user-deployed contracts.</p>
+<p>Use for: querying balances, reading state, debugging.</p>
+<pre><code class="language-bash"># Via rust client
+cargo run -- exploratory-deploy -f query.rho -p 40402
+
+# Via HTTP API
+curl -X POST http://localhost:40403/api/explore-deploy \
+  -H &#x27;Content-Type: text/plain&#x27; \
+  -d &#x27;new stdout(`rho:io:stdout`) in { stdout!(&quot;hello&quot;) }&#x27;</code></pre>
+<p><strong>Limitation:</strong> <code>rho:registry:lookup</code> resolves the URI, but you cannot trigger the looked-up contract in an exploratory deploy (it is a user contract). The lookup itself is a system call and works, but the <code>for (contract <- ch) { contract!(...) }</code> part won't fire because the registry returns data via the tuplespace which requires a real deploy.</p>
+<h3 id="full-deploy-deploy-propose">Full Deploy (deploy + propose)</h3>
+<p>State-changing. Costs phlo. Can call any contract.</p>
+<p>Use for: deploying contracts, locking tokens, calling bridge methods.</p>
+<pre><code class="language-bash"># Deploy only (let heartbeat propose)
+cargo run -- deploy -f contract.rho -p 40402 -b
+
+# Full deploy (deploy + propose + wait for data)
+cargo run -- full-deploy -f contract.rho -p 40402 -b</code></pre>
+<p>The <code>-b</code> flag sets phlo limit to 5 billion (needed for large contracts).</p>
+<h3 id="deploy-heartbeat-pattern">Deploy + Heartbeat Pattern</h3>
+<p>When the node has <code>heartbeat.enabled = true</code>, the heartbeat proposer creates blocks automatically. Use <code>deploy</code> (not <code>full-deploy</code>) and poll for the result:</p>
+<pre><code class="language-bash"># 1. Deploy
+DEPLOY_ID=$(cargo run -- deploy -f contract.rho -b -p 40402 | grep -oP &#x27;Deploy ID: \K\S+&#x27;)
+
+# 2. Wait, then poll data-at-name
+curl -s -X POST http://localhost:40403/api/data-at-name \
+  -H &#x27;Content-Type: application/json&#x27; \
+  -d &#x27;{&quot;depth&quot;:1,&quot;name&quot;:{&quot;UnforgDeploy&quot;:{&quot;data&quot;:&quot;&#x27;&quot;$DEPLOY_ID&quot;&#x27;&quot;}}}&#x27;</code></pre>
+<h2 id="deploy-id">Deploy ID</h2>
+<p>Every deploy gets a unique ID (hex string). This is the signature of the deploy data.</p>
+<p>To return results from a deploy, write to the <code>deployId</code> channel:</p>
+<pre><code class="language-rholang">new deployId(`rho:rchain:deployId`) in {
+  // ... do work ...
+  deployId!({&quot;status&quot;: &quot;ok&quot;, &quot;result&quot;: 42})
+}</code></pre>
+<p>The deployer retrieves results by querying <code>data-at-name</code> with <code>UnforgDeploy</code>:</p>
+<pre><code class="language-json">{
+  &quot;depth&quot;: 1,
+  &quot;name&quot;: { &quot;UnforgDeploy&quot;: { &quot;data&quot;: &quot;&lt;deploy-id-hex&gt;&quot; } }
+}</code></pre>
+<h2 id="registry-uris">Registry URIs</h2>
+<p>Format: <code>rho:id:<zbase32-encoded-hash></code></p>
+<p>Generated when you register a contract with <code>insertArbitrary</code>. The URI is a 34-character zbase32 encoding of a blake2b-256 hash with a 14-bit CRC checksum.</p>
+<h3 id="registering-a-contract">Registering a Contract</h3>
+<pre><code class="language-rholang">new insertArbitrary(`rho:registry:insertArbitrary`),
+    myApi, uriCh in {
+
+  // Define the contract
+  contract myApi(@method, ret) = {
+    match method {
+      &quot;ping&quot; =&gt; { ret!(&quot;pong&quot;) }
+      _      =&gt; { ret!({&quot;error&quot;: &quot;UnknownMethod&quot;}) }
+    }
+  } |
+
+  // Register it (bundle+ = write-only handle for callers)
+  insertArbitrary!(bundle+{*myApi}, *uriCh) |
+
+  for (@uri &lt;- uriCh) {
+    stdout!([&quot;Registered at&quot;, uri])
+    // uri looks like: rho:id:abc123def456...
+  }
+}</code></pre>
+<h3 id="calling-a-registered-contract">Calling a Registered Contract</h3>
+<p>From a separate deploy:</p>
+<pre><code class="language-rholang">new deployId(`rho:rchain:deployId`),
+    lookup(`rho:registry:lookup`), ch, ret in {
+  lookup!(`rho:id:abc123def456...`, *ch) |
+  for (api &lt;- ch) {
+    api!(&quot;ping&quot;, *ret) |
+    for (@result &lt;- ret) {
+      deployId!(result)  // &quot;pong&quot;
+    }
+  }
+}</code></pre>
+<h3 id="system-contract-uris">System Contract URIs</h3>
+<p>System contracts use shorthand URIs. When looking them up, they return a tuple <code>(timestamp, contract)</code>:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Shorthand</th><th>Contract</th></tr></thead>
+<tbody>
+<tr><td><code>rho:rchain:revVault</code></td><td>REV token vault</td></tr>
+<tr><td><code>rho:rchain:multiSigRevVault</code></td><td>Multi-signature vault</td></tr>
+<tr><td><code>rho:rchain:makeMint</code></td><td>Token minting factory</td></tr>
+<tr><td><code>rho:rchain:authKey</code></td><td>Auth key factory</td></tr>
+<tr><td><code>rho:rchain:pos</code></td><td>Proof of Stake</td></tr>
+<tr><td><code>rho:lang:listOps</code></td><td>List operations</td></tr>
+<tr><td><code>rho:lang:either</code></td><td>Either type (error handling)</td></tr>
+<tr><td><code>rho:lang:nonNegativeNumber</code></td><td>Non-negative number type</td></tr>
+<tr><td><code>rho:lang:treeHashMap</code></td><td>Hash map data structure</td></tr>
+</tbody></table></div>
+<pre><code class="language-rholang">// System contract pattern (note the tuple destructuring)
+rl!(`rho:rchain:revVault`, *ch) |
+for (@(_, RevVault) &lt;- ch) {
+  @RevVault!(&quot;findOrCreate&quot;, addr, *ret)
+}</code></pre>
+<p>vs user contracts:</p>
+<pre><code class="language-rholang">// User contract pattern (no tuple)
+lookup!(`rho:id:abc123...`, *ch) |
+for (contract &lt;- ch) {
+  contract!(&quot;method&quot;, *ret)
+}</code></pre>
+<h2 id="phlo-gas">Phlo (Gas)</h2>
+<p>Every operation in a full deploy costs phlo. The deployer sets a phlo limit and price:</p>
+<ul><li><strong>phloLimit</strong>: Maximum phlo to spend (default 50,000; use <code>-b</code> flag for 5 billion)</li>
+<li><strong>phloPrice</strong>: Price per unit (minimum 1)</li></ul>
+<p>If the deploy runs out of phlo, it reverts. Unused phlo is not charged.</p>
+<p>Large contracts (like bridge.rho at 15KB) need high phlo limits.</p>
+<h2 id="http-api-endpoints">HTTP API Endpoints</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Endpoint</th><th>Method</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>/api/deploy</code></td><td>POST</td><td>Submit a signed deploy</td></tr>
+<tr><td><code>/api/explore-deploy</code></td><td>POST</td><td>Run exploratory deploy (text/plain body)</td></tr>
+<tr><td><code>/api/data-at-name</code></td><td>POST</td><td>Query data on a channel</td></tr>
+<tr><td><code>/api/blocks/{n}</code></td><td>GET</td><td>Get last N blocks</td></tr>
+<tr><td><code>/api/status</code></td><td>GET</td><td>Node status</td></tr>
+</tbody></table></div>
+<h2 id="ports">Ports</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Port</th><th>Protocol</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td>40400</td><td>TCP</td><td>P2P protocol</td></tr>
+<tr><td>40401</td><td>gRPC</td><td>External API</td></tr>
+<tr><td>40402</td><td>gRPC</td><td>Internal/deploy API</td></tr>
+<tr><td>40403</td><td>HTTP</td><td>HTTP/WebSocket API</td></tr>
+<tr><td>40404</td><td>TCP</td><td>Peer discovery</td></tr>
+<tr><td>40405</td><td>HTTP</td><td>Admin API</td></tr>
+</tbody></table></div>
+<div class="page-nav">
+  <span><a href="03-system-contracts.html">&larr; System Contracts</a></span>
+  <span><a href="05-security-patterns.html">Security Patterns &rarr;</a></span>
+</div>
+</main>
+</body>
+</html>
